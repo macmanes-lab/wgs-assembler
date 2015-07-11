@@ -1,0 +1,96 @@
+This guide tells how to compile and install the software.
+
+----------------------------------------
+Quick Instructions:
+
+% gmake install
+
+There!  That wasn't tough at all, was it!?
+
+The software is compiled in place, and installed into a directory named
+after the OS/architecture, for example, Linux-amd64.
+
+----------------------------------------
+Detailed Instructions:
+
+0)  Required Software
+1)  Configuration
+2)  Compilation
+3)  Installation
+4)  Other build targets
+
+----------
+0)  Required software
+
+Project kmer requires two additional software packages be installed:
+python and gmake.
+
+0.1)  Python.
+
+Python (http://www.python.org/) is a freely available programming
+language.  It is frequently installed by many OS installations.
+
+It is only needed by ATAC/A2Amapper.  If python is not installed,
+ATAC/A2Amapper will not be built.
+
+Version 2.4+ is recommended.
+Version 2.3 has seen limited testing and seems to work.
+Version 2.2 might work, but is unsupported.
+
+0.2)  gmake.
+
+The GNU make program (gmake) is used to build the software.  The BSD
+make will not work.
+
+gmake v 3.81 or higher is REQUIRED.  This shouldn't be a problem, as that
+was released in April 2006.  It _was_ a problem when most of this software
+was written.
+
+----------
+1)  Configuration
+
+This is optional.  It allows compilation for debuging  and profiliing.
+
+% sh configure.sh [debug | profile]
+
+Supplying 'debug' as an argument will build debuggable executables.
+
+Supplying 'profile' as an argument will build profiling executables.
+
+Not all architectures support profiling.
+
+If configure.sh reports that your architecture is unsupported, you'll
+have to port...or force it to use, say, linux with "configure.sh
+linux".
+
+If configure.sh reports that python cannot be found, you likely need
+to install python, version 2.3 or 2.4.  If you have pyhton installed
+in an unusual location, edit the script.
+
+----------
+2)  Compilation
+
+% gmake
+
+If gmake crashes or returns
+
+        gmake: *** No rule to make target `.all', needed by `all'.  Stop.
+
+then you need to update your gmake to at least version 3.81.
+
+----------
+3)  Installation
+
+% gmake install
+
+will copy all executables, libraries and header files into an
+OS/architecture specific directory.  Binaries, for example, will be in
+FreeBSD-amd64/bin or Linux-i686/bin.
+
+----------
+4)  Other build targets
+
+'gmake clean' will remove the object files, leaving the binaries.
+
+'gmake real-clean' will remove all traces of a build, leaving you
+with (hopefully) a virgin copy of the software.

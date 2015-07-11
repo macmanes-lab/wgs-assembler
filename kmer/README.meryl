@@ -1,0 +1,156 @@
+meryl - in- and out-of-core kmer counting and utilities.
+
+Copyright (C) 2002, and GNU GPL,       PE Corporation (NY) through the Celera Genomics Group
+Copyright (C) 2003-2004, and GNU GPL,  Applied Biosystems
+Copyright (C) 2004-2015, and GNU GPL,  Brian Walenz
+
+=======================================================================
+
+Content:
+
+I.   What is meryl?
+II.  Command line usage
+III. Input/Output
+IV.  Affiliated tools
+V.   Terms of use
+VI.  Support
+
+
+I.   What is meryl?
+
+meryl computes the kmer content of genomic sequences.  Kmer content is
+represented as a list of kmers and the number of times each occurs in the
+input sequences.  The kmer can be restricted to only the forward kmer, only
+the reverse kmer, or the canonical kmer (lexicographically smaller of the forward and reverse
+kmer at each location).  Meryl can report the histogram of counts,
+the list of kmers and their counts, or can perform mathematical and set operations
+on the processed data files.
+
+The meryl process can run in one large memory batch, in many small memory batches, or under SGE
+control, all with or without using multiple CPU cores.
+
+The maximum kmer size is effectively unlimited, but set at compile time.  Larger kmers use more
+memory, and are inefficient for counting smaller kmers, and since most applications have involved
+kmers less than 32 bases, the default compile time limit is 32 bases.
+
+The output of meryl is two binary files, called a meryl database, which can be
+quickly dumped to provide a histogram of counts, or the actual counts.
+A C++ library is supplied for direct access to the files.
+
+The meryl program can perform many mathematical and set operations on
+multiple database files: min, minexist, max, add, sub,abs, and, nand, or,
+xor, lessthan, lessthanorequal, greaterthan, greatherthanorequal, and equal.
+
+The ATAC pipeline uses meryl to find the unique kmers in two sequences ('lessthanorequal 1')
+then computes the 'and' of them to find the unique kmers that exist in
+both sequences.
+
+
+II. Command line usage
+
+A simple invocation:
+
+meryl -B -C -m 22 -s /data/references/ecolik12.fasta -o ecoli-22mers
+
+The above command will build (-B) a kmer database (-o ecoli-22mers)
+of the canonical (-C) 22-mers (-m 22) in the FASTA file ecolik12.fasta.
+The two output files are ecoli-22mers.mcidx and ecoli-22mers.mcdat.
+
+meryl -Dh -s ecoli-22mers > ecoli-22mers.fasta
+
+The above command will dump a histogram of the kmers in the 'ecoli-22mers'
+database.  The histogram has four columns:
+
+  kmer-count  number-of-kmers  fraction-distinct  fraction-total
+  [example]
+
+The first line tells us that there are X kmers that occur exactly once, that
+these sequences make up XX% of lthe kmer composition, and that these sequences
+account for YY% of all the kmers in the input.
+
+meryl -M and -s seq1 -s seq2 -o both
+
+The above command will report the kmers that are present in both meryl databases
+'seq1' and 'seq1', writing them to a new meryl database 'both'.
+
+Run with no options for a list of parameters.
+
+See http://kmer.sourceforge.net/wiki/index.php/Getting_Started_with_Meryl for more.
+
+
+III. Input/Output
+
+For counting kmers, input is exactly one multi-FASTA or FASTQ file.  The
+file must be uncompressed.
+
+For processing databases, an input database is supplied by the prefix of the two
+files:  the prefix of 'ecoli-ms22.mcidx' and 'ecoli-ms22.mcdat' is 'ecoli-ms22'.
+
+Output is a 'meryl database' consisting of two binary files, '*.mcidx' and '*.mcdat'.
+
+Output of the histogram command is a single text file to stdout.
+
+Output of the threshold dump is a multi-FASTA file, with the name of the sequence
+set to the count, and the sequence set to the kmer.
+
+
+IV. Affiliated tools
+
+Several additional kmer counting and analysis programs are included in the meryl package.
+
+simple         - The obvious array based kmer counter.  It will allocate 4 bytes per
+                 kmer; k=16 will need 16 GB to run.
+
+                 NEEDS UPDATE
+
+mapMers        - Report stats of mapping kmers to sequences.  Three modes of opeeration:
+                  -stats     repotrs mean, min and max for each sequence, along with a
+                             log2 histogram of the counts
+                  -regions   reports regions with kmer coverage
+                  -details   reports for each kmer in the sequence, the forward and reverse
+                             count in the database
+
+mapMers-depth  - Reports, for each sequence ordinal 's' and position 'p':
+                  -count     the count (c) of the single kmer that starts at position (p).
+                             Format: 's p c'
+                  -depth     the number (n) of kmers that span position (p).  Format: 's p n'
+                  -stats     the min (m), max (M), ave (a) count of all mers that span
+                             position (p).  Format: 's p m M a t n'
+                             (also reports total count (t) and number of kmers (n))
+
+kmer-mask      - Mask and filter set of sequences (presumed to be reads) by kmer content.
+                 Masking can be done to retain novel sequence not in the database, or to retain
+                 confirmed sequence present in the database.  Filtering will segregate sequences
+                 fully, partially or not masked.
+
+existDB        - (installed by libkmer) Management of existDB files.
+positionDB     - (installed by libkmer) Management of posDB files.
+
+
+V. Terms of use
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your
+option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received (LICENSE.txt) a copy of the GNU General
+Public License along with this program; if not, you can obtain one from
+http://www.gnu.org/licenses/gpl.txt or by writing to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+VI. Support 
+
+Brian Walenz (brianwalenz@users.sourceforge.net)
+
+Please check the parent project's Sourceforge page at
+http://kmer.sourceforge.net for details and updates.
+
+
+Last updated: May 13, 2015

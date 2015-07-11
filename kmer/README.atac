@@ -1,0 +1,100 @@
+atac - assembly-to-assembly comparasion, comparative mapping between
+       two genome assemblies (same species), or between two different
+       genomes (cross species).
+
+Described in the publication: 
+
+S. Istrail, et al. "Whole-genome shotgun assembly and comparison of
+human genome assemblies" PNAS, Feb 2004; 101: 1916-1921 
+
+Copyright (C) 2002, and GNU GPL,       PE Corporation (NY) through the Celera Genomics Group
+Copyright (C) 2003-2004, and GNU GPL,  Applied Biosystems
+Copyright (C) 2004-2015, and GNU GPL,  Brian Walenz
+
+=======================================================================
+
+Content:
+
+I.   What is atac?
+II.  Command line usage
+III. Input/Output
+IV.  Affiliated tools
+V.   Terms of use
+VI.  Support
+
+
+I.   What is atac?
+
+atac computes a one-to-one pairwise alignment of large DNA sequences.  It first
+finds the unique k-mers in each sequence, chains them to larger blocks, and
+fills in spaces between blocks.  It was written primarily to transfer annotations
+between different assemblies of the human genome.
+
+The output is a set of ungapped 'matches', and a set of gapped 'runs' formed from
+the matches.  Each match or run associates one sequence with the other sequence.
+The association is 'unique', in that there is no other (sizeable) associations
+for either sequence.  Thus, large repeats and duplications are not present in
+the output - they appear as unmapped regions.
+
+Though the output is always pairwise, atac can cache intermediate results to speed
+a comparisons of multiple sequences.
+
+
+II. Command line usage
+
+A simple invocation:
+
+atac.pl \
+  -dir      ecoli-k-vs-o \
+  -meryldir atac-sequences \
+  -id1 K -seq2 /data/references/ecolik12.fasta \
+  -id2 O -seq1 /data/references/ecolio157.fasta
+
+Run with no options for a list of parameters.
+
+See http://kmer.sourceforge.net/wiki/index.php/Getting_Started_with_ATAC for more.
+
+
+III. Input/Output
+
+Input is two multi-FASTA files.  The files must be uncompressed.
+
+Output is in two self-documenting text files, reported at the end of the run:
+
+  Finished!  Output is:
+    matches and runs -- /work/ecoli-k-vs-o/KvsO.atac
+    clumps           -- /work/ecoli-k-vs-o/KvsO.*clump*.atac
+
+
+IV. Affiliated tools
+
+N/A
+
+
+V. Terms of use
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your
+option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received (LICENSE.txt) a copy of the GNU General
+Public License along with this program; if not, you can obtain one from
+http://www.gnu.org/licenses/gpl.txt or by writing to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+VI. Support 
+
+Brian Walenz (brianwalenz@users.sourceforge.net)
+
+Please check the parent project's Sourceforge page at
+http://kmer.sourceforge.net for details and updates.
+
+
+Last updated: May 11, 2015
